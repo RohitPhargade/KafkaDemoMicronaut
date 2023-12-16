@@ -30,6 +30,8 @@ pipelines:
           clean_workspace: true
           jobs:
             Docker-Build-and-Push:
+              resources:
+                - MSI
               tasks:
                 - exec:
                     command: "make all"
