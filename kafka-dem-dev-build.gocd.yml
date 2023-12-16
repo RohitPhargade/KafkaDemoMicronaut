@@ -1,15 +1,3 @@
-
-
-#pipeline name
-#pipleline branch
-#git source
-#git credentials
-#secure variable
-#material
-#stage
-#job
-#gocd agent name
-
 format_version: 9
 pipelines:
   Micronaut-Docker-Build:
@@ -32,17 +20,17 @@ pipelines:
 #    materials:
 #      - git: "https://github.com/RohitPhargade/KafkaDemoMicronaut.git"
 #        branch: main
-    resources:
-      - name: Docker-Agent
-        type: agent
+#    resources:
+#      - name: Docker-Agent
+#        type: agent
     stages:
-      Build-and-Push:
-        clean_workspace: true
-        jobs:
-          Docker-Build-and-Push:
-            tasks:
-              - exec:
-                  command: "make all"
+      - Build-and-Push:
+          clean_workspace: true
+          jobs:
+            Docker-Build-and-Push:
+              tasks:
+                - exec:
+                    command: "make all"
 #                  arguments: ["all"]
 #            environment_variables:
 #              DOCKER_REGISTRY: "your-docker-registry"
@@ -53,5 +41,5 @@ pipelines:
 #                encrypted_value: "encrypted-username"
 #              DOCKER_PASSWORD:
 #                encrypted_value: "encrypted-password"
-            resources:
-              - MSI
+#            resources:
+#              - MSI
