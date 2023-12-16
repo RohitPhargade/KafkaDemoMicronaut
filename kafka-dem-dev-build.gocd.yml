@@ -1,19 +1,77 @@
-format_version: 9
+format_version: 10
 pipelines:
-  Micronaut-Docker-Build:
-    group: pipeline-group-1 # note that the group name can contain only of alphanumeric & underscore characters
-    display_order: 10
+  Micronaut-Docker-dev-Build-pipeline:
+    group: pipeline-group-1
+    label_template: ${COUNT}
+    lock_behavior: none
+    display_order: -1
+    environments:
+      - Dev_Environment
+    materials:
+      Micronaut-Docker-Build-material:
+        git: https://github.com/RohitPhargade/KafkaDemoMicronaut.git
+        shallow_clone: false
+        auto_update: false
+        branch: main
+    stages:
+      - Build-and-Push:
+          clean_workspace: true
+          jobs:
+            Docker-Build-and-Push:
+              resources:
+                - MSI
+              tasks:
+                - exec:
+                    command: "make all"
+#                - exec:
+#                    arguments:
+#                      - build
+#                    command: gradle
+#                    run_if: passed
+      - stagenumber1:
+          fetch_materials: true
+          keep_artifacts: false
+          clean_workspace: false
+          approval:
+            type: success
+            allow_only_on_success: false
+          jobs:
+            job1:
+              timeout: 0
+              environment_variables:
+                plaintextvar1: plaintextvar1value
+                plaintextvar2: plaintextvar2value
+              secure_variables:
+                securevar1: AES:7CBrJrJLAS38HTZvKOARtg==:oj0HZceqbfOfVs83Bnwb4w==
+                securevar2: AES:RRdpxZJLGkSFXYv84IgavA==:ZJaLbwafSB2edZ7554ZWrA==
+              tasks:
+                - exec:
+                    arguments:
+                      - build
+                    command: gradle
+                    run_if: passed
+    parameters:
+      parameter1: parameter1value
+
+
+
+
+#format_version: 9
+#pipelines:
+#  Micronaut-Docker-Build:
+#    group: pipeline-group-1 # note that the group name can contain only of alphanumeric & underscore characters
+#    display_order: 10
 #    label_template: "${mygit[:8]}"
 #    lock_behavior: none
 #    parameters: # list of parameters that can be configured for a pipeline
 #      param1: value1
-    environments:
-      - Dev_Environment
-    materials:
-      mygit: # this is the name of material, the name can contain only of alphanumeric & underscore characters
-        # keyword git says about type of material and url at once
-        git: https://github.com/RohitPhargade/KafkaDemoMicronaut.git
-        branch: main
+#    environments:
+#      - Dev_Environment
+#    materials:
+#      mygit: # this is the name of material, the name can contain only of alphanumeric & underscore characters
+#        # keyword git says about type of material and url at once
+#        git: https://github.com/RohitPhargade/KafkaDemoMicronaut.git
+#        branch: main
 #      myupstream: # this name does not matter, but there should be no 2 materials with the same name
         # type is optional here, material type is implied based on presence of pipeline and stage fields
         # type: dependency
@@ -25,16 +83,16 @@ pipelines:
 #    resources:
 #      - name: Docker-Agent
 #        type: agent
-    stages:
-      - Build-and-Push:
-          clean_workspace: true
-          jobs:
-            Docker-Build-and-Push:
-              resources:
-                - MSI
-              tasks:
-                - exec:
-                    command: "make all"
+#    stages:
+#      - Build-and-Push:
+#          clean_workspace: true
+#          jobs:
+#            Docker-Build-and-Push:
+#              resources:
+#                - MSI
+#              tasks:
+#                - exec:
+#                    command: "make all"
 #                  arguments: ["all"]
 #            environment_variables:
 #              DOCKER_REGISTRY: "your-docker-registry"
