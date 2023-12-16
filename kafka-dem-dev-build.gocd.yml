@@ -1,6 +1,8 @@
 format_version: 9
 pipelines:
   Micronaut-Docker-Build:
+    group: pipeline-group-1 # note that the group name can contain only of alphanumeric & underscore characters
+    display_order: 10
 #    label_template: "${mygit[:8]}"
 #    lock_behavior: none
 #    parameters: # list of parameters that can be configured for a pipeline
